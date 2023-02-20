@@ -10,6 +10,10 @@ Vue.prototype.$util = util
 import uView from '@/uni_modules/uview-ui'
 Vue.use(uView)
 
+// 引入自定义tabbar
+// import tabbar from './components/tabbar/tabbar'
+// Vue.use('tab-bar',tabbar)
+
 Vue.prototype.$store = store
 Vue.config.productionTip = false
 

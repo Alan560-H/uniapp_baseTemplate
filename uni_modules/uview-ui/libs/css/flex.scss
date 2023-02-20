@@ -1,30 +1,3 @@
-// .u-flex {
-// 	@include vue-flex(row);
-// }
-
-// .u-flex-x {
-// 	@include vue-flex(row);
-// }
-
-// .u-flex-y {
-// 	@include vue-flex(column);
-// }
-
-// .u-flex-xy-center {
-// 	@include vue-flex(row);
-// 	justify-content: center;
-// 	align-items: center;
-// }
-
-// .u-flex-x-center {
-// 	@include vue-flex(row);
-// 	justify-content: center;
-// }
-
-// .u-flex-y-center {
-// 	@include vue-flex(column);
-// 	justify-content: center;
-// }
 
 
 // flex布局
@@ -43,7 +16,6 @@
 	@include flex;
 	justify-content: center;
 }
-
 .u-flex-xy-center {
 	@include flex;
 	justify-content: center;

@@ -16,6 +16,10 @@ export function userLogin(params){
 	return http.post('api/login', params)
 }
 
+// 更新用户信息
+export function upDataUserInfo(params){
+	return http.post('api/upUser', params)
+}
  //更改配置项，阻止loading提示
 // export function getUserInfo(params){
 // 	return http.post('api/login', {custom:{ShowLoading:false}})
