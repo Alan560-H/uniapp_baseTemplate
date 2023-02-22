@@ -1,17 +1,25 @@
 <template>
 	<view class="content">
 		<u-navbar title="蜜蜂论文打印" @rightClick="rightClick" :autoBack="false" bgColor="inherit"
-			titleStyle="font-weight: bold;">
+			titleStyle="font-weight: 550;">
 			<view slot="left" />
 		</u-navbar>
 		<!-- 头部背景图 -->
 		<view class="headerView ">
 			<image class="logo " src="/static/bg.png"></image>
+			<view class="contentTxt">
+				<u--text text="蜜蜂论文打印，您的私人论文打印专家~" align="center" size="18" color="rgba(255,255,255,.8)"></u--text>
+			</view>
 		</view>
-		<view class="updataView u-flex u-flex-middle">
+		<view class="updataView u-flex u-flex-middle hzs_flex_column">
 			<u--image :showLoading="true" :src="src" width="370rpx" height="370rpx" @click="upFile"></u--image>
-
 		</view>
+		<view class="">
+			<u-radio-group v-model="radiovalue1" placement="column" @change="goAgreement">
+				<u-radio activeColor="#fe6d15" :customStyle="{marginBottom: '8px'}" label="我已阅读并已同意以下协议" name="协议" />
+			</u-radio-group>
+		</view>
+
 		<!-- 上传文件组件 -->
 	</view>
 </template>
@@ -25,7 +33,8 @@
 		name: "index",
 		data() {
 			return {
-				src: "/static/upFile.png"
+				src: "/static/upFile.png",
+				radiovalue1: "协议"
 			}
 		},
 		onLoad() {
@@ -33,6 +42,9 @@
 			console.log(this.$util.isLogin());
 		},
 		methods: {
+			goAgreement() {
+				uni.$u.route('/pages/agreement/agreement')
+			},
 			upFile() {
 				const that = this;
 				this.loading = true;
@@ -41,44 +53,22 @@
 					type: 'file',
 					count: 1,
 					extension: ['pdf'], //可自定义过滤文件
-					success(res) {
-						console.log('msgfile', res);
+					success({
+						tempFiles
+					}) {
 						// 处理loading过快消失的bug，可能和微信执行的顺序有关，打开上传文件会刷新页面
 						setTimeout(() => {
 							uni.showLoading({
 								title: '文件上传中...',
 								mask: true
 							})
+							uni.$u.route({
+								type: "to",
+								url: "/pages/configFile/configFile",
+								params: tempFiles[0]
+							})
 						}, 500)
-						wx.uploadFile({
-							url: that.$u.api.getUploadCVFileUrl, //上传api地址
-							filePath: res.tempFiles[0].path,
-							name: "file",
-							header: {
-								"content-type": "application/x-www-form-urlencoded",
-								xToken: that.$store.state.vuex_token
-							},
-							formData: {
-								type: 'common'
-							},
-							success(data) {
-								// 微信返回的数据被转成string
-								const curData = JSON.parse(data.data);
-								if (curData.code === 200) {
-									// that.form.lastCV.cvUrl = JSON.parse(data.data).result.path;
-									// that.form.lastCV.cvName = res.tempFiles[0].name;
-									// that.form.lastCV.cvSize = (res.tempFiles[0].size / 1024).toFixed(2);
-								} else {
-									that.$u.toast(decodeURIComponent(curData.msg), 3000);
-								}
-								uni.hideLoading();
-								// uni.hideLoading();
-							},
-							fail(err) {
-								uni.hideLoading();
-							}
 
-						})
 					},
 					fail(err) {
 						uni.hideLoading();
@@ -99,19 +89,25 @@
 		justify-content: center;
 
 		.headerView {
-			min-height: 50vh;
+			min-height: calc(50vh - 124rpx);
 			width: 100vw;
+			position: relative;
 			.logo {
 				width: 100vw;
+			}
+			.contentTxt{
+				position: absolute;
+				top: calc(50% - 60rpx);
+				width: calc(100vw - 60rpx);
+				padding:30rpx;
+				text-align: center;
 			}
 		}
 	}
 
 	.updataView {
-		min-height: 50vh;
+		min-height: calc(50vh);
 		width: 100vw;
-		
-	}
 
-	
+	}
 </style>
